@@ -23,11 +23,39 @@ const App = () => {
 
   const [text, setText] = useState("");
   const [removeParentHease, setRemoveParentHease] = useState("");
-  const removeParentHeaseAndRevese = (string) => {
-    let str;
-    str = string.replace(/[()]/g, "");
-    setRemoveParentHease(str);
+
+  const reverse = (strArray, len, i) => {
+    if (len < i) {
+      let char = strArray[len];
+
+      strArray[len] = strArray[i];
+      strArray[i] = char;
+      reverse(strArray, len + 1, i - 1);
+    }
   };
+
+  const reverseParentheses = (str, len) => {
+    let string = [];
+    for (let i = 0; i < len; i++) {
+      if (str[i] === "(") {
+        string.push(i);
+      } else if (str[i] === ")") {
+        let strArray = [...str];
+        reverse(strArray, string[string.length - 1] + 1, i);
+        str = [...strArray];
+        string.pop();
+      }
+    }
+
+    let result = "";
+    for (let i = 0; i < len; i++) {
+      if (str[i] !== ")" && str[i] !== "(") {
+        result += str[i];
+      }
+    }
+    setRemoveParentHease(result);
+  };
+
   return (
     <div className="wapper">
       <div>
@@ -47,7 +75,7 @@ const App = () => {
         />
         <button
           onClick={() => {
-            removeParentHeaseAndRevese(text);
+            reverseParentheses(text, text.length);
           }}
         >
           Change
